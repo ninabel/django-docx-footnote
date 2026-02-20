@@ -1,0 +1,17 @@
+[project]
+name = "django-docx-footnote"
+version = "0.1.0"
+description = "Django admin DOCX uploader with footnote processing"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django>=4,<5",
+    "mammoth>=1.11.0",
+]
+license = {file = "LICENSE"}
+
+[tool.uv.workspace]
+members = [
+    "example",
+    ".",
+]

@@ -1,0 +1,37 @@
+<div>
+    <input type="file" name="upload_file" accept=".docx">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const devMode = "{{ debug|yesno:'true,false' }}"; // Set to false in production
+    const htmlFieldName = "{{ widget.attrs.HtmlField|default:'text' }}";
+    const fileInput = document.querySelector('input[type="file"][name$="upload_file"]');
+    if (!fileInput || !htmlFieldName) return;
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file && file.name.endsWith('.docx')) {
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/admin/docx-preview/', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const textarea = document.querySelector(`textarea[name="${htmlFieldName}"]`);
+                if (textarea && data.html) {
+                    textarea.value = data.html;
+                }
+            })
+            .catch(error => {
+                if (devMode === 'true') {
+                    alert('Error: ' + (error && error.message ? error.message : error));
+                    console.error(error);
+                }
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,19 @@
+{{ content|safe }}
+{% if footnotes %}
+<div class="footnotes-container">
+    <h2>{% trans "Footnotes" | upper %}</h2>
+    <ol class="footnotes-list">
+        {% for footnote in footnotes %}
+            <li id="{{ footnote.tag }}" class="footnote-item">
+                <span class="footnote-content">{{ footnote.content|safe }}</span>
+                {% if footnote.source %}
+                    <span class="footnote-source">
+                        — <a href="{{ footnote.source }}" target="_blank">^</a>
+                    </span>
+                {% endif %}
+                <a href="#footnote-ref-{{ footnote.id }}" class="footnote-backref">↩</a>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+{% endif %}
