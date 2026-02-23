@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .document {
+            background: white;
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .document h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        .footnote {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <h1>{{ document.title }}</h1>
+        <div class="content">
+            {{ document.content|safe }}
+        </div>
+    </div>
+    <a href="{% url 'document_list' %}">Back to Documents List</a>
+</body>
+</html>

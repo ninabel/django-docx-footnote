@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django_docx_footnote.admin import views
 from django_docx_footnote.admin.views import docx_preview_view
+from .views import document_list, document_detail
 
 urlpatterns = [
     path('admin/docx-preview/', docx_preview_view, 
          name='docx_preview'),
     path('admin/', admin.site.urls),
+    path('document/<int:pk>/', document_detail, name='document_detail'),
+    path('', document_list, name='document_list'),
 ]
