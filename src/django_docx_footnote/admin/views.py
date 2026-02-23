@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 import zipfile
 import re
@@ -9,6 +10,7 @@ style_map = """
 p[style-name='Center'] => p.align-center
 p[style-name='Right']  => p.align-right
 """
+
 def extract_alignment(file):
     """Reads document.xml from DOCX and returns a list of alignments for each paragraph."""
     alignments = []
@@ -40,6 +42,32 @@ def add_alignment_to_html(html, alignments):
             updated_html = updated_html.replace(p_tag, new_tag, 1)
     return updated_html
 
+def get_footnote_from_html(html):
+    """Extracts footnotes from HTML and returns a list of footnote texts."""
+    footnotes_ol_match = re.search(
+    r'<ol[^>]*>(<li id="footnote-\d+"[^>]*>.*?)</ol>',
+    html, re.DOTALL | re.IGNORECASE
+    )
+    if footnotes_ol_match:
+        footnotes_html = footnotes_ol_match.group(1)
+        main_content = html.replace(footnotes_ol_match.group(0), '').strip()
+    else:
+        main_content = html
+        footnotes_html = ''
+        
+    return {
+        'content': main_content,
+        'footnotes': [
+            {
+                'id': match.group(2),
+                'tag': match.group(1),
+                'text': match.group(3).strip().replace(match.group(4), ''),
+                'backref': match.group(5)
+            }
+            for match in re.finditer(r'<li id="(footnote-(\d+))"><p>(.*?(<a href="(#footnote-ref-\d+)">.*?</a>))</p></li>', footnotes_html, re.DOTALL)
+        ]
+    }
+
 @require_http_methods(["POST"])
 def docx_preview_view(request):
     if request.method == 'POST' and request.FILES.get('file'):
@@ -47,5 +75,6 @@ def docx_preview_view(request):
         alignments = extract_alignment(file)
         result = convert_to_html(file, style_map=style_map)
         html = add_alignment_to_html(result.value, alignments)
-        return JsonResponse({'html': html})
-    return JsonResponse({'html': ''})
+        document = get_footnote_from_html(html)
+        return render(request, 'footnotes.html', document)
+    return ''

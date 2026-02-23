@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const htmlFieldName = "{{ widget.attrs.HtmlField|default:'text' }}";
     const fileInput = document.querySelector('input[type="file"][name$="upload_file"]');
     if (!fileInput || !htmlFieldName) return;
+    fileInput.addEventListener('click', function() {
+        this.value = null; // Clear previous selection
+    });
     fileInput.addEventListener('change', function() {
         const file = this.files[0];
         if (file && file.name.endsWith('.docx')) {
@@ -18,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData,
                 headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
             })
-            .then(res => res.json())
+            .then(res => res.text())
             .then(data => {
                 const textarea = document.querySelector(`textarea[name="${htmlFieldName}"]`);
-                if (textarea && data.html) {
-                    textarea.value = data.html;
+                if (textarea && data) {
+                    textarea.value = data;
                 }
             })
             .catch(error => {
