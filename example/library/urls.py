@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django_docx_footnote.admin import views
 from django_docx_footnote.admin.views import docx_preview_view
 from .views import document_list, document_detail
 

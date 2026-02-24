@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "django>=4,<5",
-    "mammoth=1.11.0",
+    "mammoth==1.11.0",
 ]
 license = {file = "LICENSE"}
 
@@ -14,4 +14,9 @@ license = {file = "LICENSE"}
 members = [
     "example",
     ".",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.2",
 ]
