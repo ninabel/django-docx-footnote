@@ -12,11 +12,17 @@ license = {file = "LICENSE"}
 
 [tool.uv.workspace]
 members = [
-    "example",
-    ".",
+    "demos/example",
+    "demos/tinymce",
+    "demos/ckeditor",
 ]
 
 [dependency-groups]
 dev = [
     "ruff>=0.15.2",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["django_docx_footnote*"]  # Only plugin!
+exclude = ["demos*"]        # Demo-only!

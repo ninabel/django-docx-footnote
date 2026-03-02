@@ -10,5 +10,4 @@ wheels/
 .venv
 .env
 temp.py
-example/db.sqlite3
-example/library/migrations/*
+*.sqlite3

@@ -14,15 +14,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from django_docx_footnote.admin.views import docx_preview_view
-from .views import document_list, document_detail
+from library.views import document_list, document_detail
+
+admin.autodiscover()
 
 urlpatterns = [
-    path('admin/docx-preview/', docx_preview_view, 
-         name='docx_preview'),
-    path('admin/', admin.site.urls),
-    path('document/<int:pk>/', document_detail, name='document_detail'),
-    path('', document_list, name='document_list'),
+    path("admin/docx-preview/", docx_preview_view, name="docx_preview"),
+    path("admin/", admin.site.urls),
+    path("document/<int:pk>/", document_detail, name="document_detail"),
+    path("", document_list, name="document_list"),
 ]
