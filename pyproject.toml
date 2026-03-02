@@ -36,5 +36,13 @@ include = ["django_docx_footnote*"]  # Only plugin!
 exclude = ["demos*"]        # Demo-only!
 
 [tool.setuptools.package-data]
+<<<<<<< HEAD
+<<<<<<< HEAD
 mypackage = ["django_docx_footnote/templates/*.html"]
+=======
+mypackage = ["templates/*.html"]
+>>>>>>> ec5ce91 (Include templates into the package)
+=======
+mypackage = ["django_docx_footnote/templates/*.html"]
+>>>>>>> 853350d (Include templates into the package)
 
