@@ -19,10 +19,22 @@ members = [
 
 [dependency-groups]
 dev = [
+    "build>=1.4.0",
     "ruff>=0.15.2",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["django_docx_footnote*"]  # Only plugin!
 exclude = ["demos*"]        # Demo-only!
+
+[tool.setuptools.package-data]
+mypackage = ["django_docx_footnote/templates/*.html"]
+
