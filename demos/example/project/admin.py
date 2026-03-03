@@ -21,4 +21,3 @@ class DocumentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Document, DocumentAdmin)
-print("Registered Document model with custom admin form and widget for docx upload")

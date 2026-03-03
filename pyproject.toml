@@ -13,8 +13,8 @@ license = {file = "LICENSE"}
 [tool.uv.workspace]
 members = [
     "demos/example",
-    "demos/tinymce",
-    "demos/ckeditor",
+    "demos/tinymce_demo",
+    "demos/ckeditor_demo",
 ]
 
 [dependency-groups]
