@@ -11,3 +11,6 @@ wheels/
 .env
 temp.py
 *.sqlite3
+demos/ckeditor_demo/django_ckeditor_5/node_modules/*
+demos/staticfiles/*
+uv.lock
