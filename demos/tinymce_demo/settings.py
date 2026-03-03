@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_docx_footnote",
+    "tinymce",
     "library",
     "project",
 ]
@@ -128,3 +129,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+TINYMCE_JS_URL = "/static/tinymce/tinymce.min.js"
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "plugins": "lists link image preview",
+    "toolbar": "docx undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview",
+}
