@@ -133,6 +133,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 TINYMCE_JS_URL = "/static/tinymce/tinymce.min.js"
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
-    "plugins": "lists link image preview",
+    "plugins": "lists link image preview docx_upload_plugin",
     "toolbar": "docx undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview",
+    "license_key": "gpl",
+}
+TINYMCE_EXTRA_MEDIA = {
+    "js": [
+        "js/tinymce_docx_button.js",  # in STATICFILES_DIRS / app static
+    ],
 }
