@@ -20,4 +20,5 @@ class DocumentAdmin(admin.ModelAdmin):
     form = DocumentAdminForm
 
 
+# register Document model with custom admin form and widget for docx upload
 admin.site.register(Document, DocumentAdmin)

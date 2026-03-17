@@ -2,7 +2,6 @@ from django.contrib import admin
 from django import forms
 from library.models import Document
 
-# from django_docx_footnote.admin.widgets import DocxUploadWidget
 from tinymce.widgets import TinyMCE
 
 
@@ -15,6 +14,7 @@ class DocumentAdminForm(forms.ModelForm):
         }
 
 
+# register Document model with custom admin form and widget for docx upload
 class DocumentAdmin(admin.ModelAdmin):
     form = DocumentAdminForm
 
