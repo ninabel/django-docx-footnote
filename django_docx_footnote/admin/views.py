@@ -4,11 +4,13 @@ import zipfile
 import re
 import xml.etree.ElementTree as ET
 from mammoth import convert_to_html
+from django.http import HttpResponse
 
 style_map = """
 p[style-name='Center'] => p.align-center
 p[style-name='Right']  => p.align-right
 """
+
 
 def extract_alignment(file):
     """Reads document.xml from DOCX and returns a list of alignments for each paragraph."""
@@ -26,6 +28,7 @@ def extract_alignment(file):
                     alignments.append(None)
     return alignments
 
+
 def add_alignment_to_html(html, alignments):
     """Adds inline text-align styles to HTML paragraphs without external libs."""
     paragraphs = re.findall(r"<p.*?>.*?</p>", html, flags=re.DOTALL)
@@ -35,45 +38,54 @@ def add_alignment_to_html(html, alignments):
             css_align = "justify" if align == "both" else align
             # Inject style attribute
             if 'style="' in p_tag:
-                new_tag = re.sub(r'style="', f'style="text-align: {css_align}; ', p_tag, count=1)
+                new_tag = re.sub(
+                    r'style="', f'style="text-align: {css_align}; ', p_tag, count=1
+                )
             else:
                 new_tag = p_tag.replace("<p", f'<p style="text-align: {css_align};"', 1)
             updated_html = updated_html.replace(p_tag, new_tag, 1)
     return updated_html
 
+
 def get_footnote_from_html(html):
     """Extracts footnotes from HTML and returns a list of footnote texts."""
     footnotes_ol_match = re.search(
-    r'<ol[^>]*>(<li id="footnote-\d+"[^>]*>.*?)</ol>',
-    html, re.DOTALL | re.IGNORECASE
+        r'<ol[^>]*>(<li id="footnote-\d+"[^>]*>.*?)</ol>',
+        html,
+        re.DOTALL | re.IGNORECASE,
     )
     if footnotes_ol_match:
         footnotes_html = footnotes_ol_match.group(1)
-        main_content = html.replace(footnotes_ol_match.group(0), '').strip()
+        main_content = html.replace(footnotes_ol_match.group(0), "").strip()
     else:
         main_content = html
-        footnotes_html = ''
-        
+        footnotes_html = ""
+
     return {
-        'content': main_content,
-        'footnotes': [
+        "content": main_content,
+        "footnotes": [
             {
-                'id': match.group(2),
-                'tag': match.group(1),
-                'text': match.group(3).strip().replace(match.group(4), ''),
-                'backref': match.group(5)
+                "id": match.group(2),
+                "tag": match.group(1),
+                "text": match.group(3).strip().replace(match.group(4), ""),
+                "backref": match.group(5),
             }
-            for match in re.finditer(r'<li id="(footnote-(\d+))"><p>(.*?(<a href="(#footnote-ref-\d+)">.*?</a>))</p></li>', footnotes_html, re.DOTALL)
-        ]
+            for match in re.finditer(
+                r'<li id="(footnote-(\d+))"><p>(.*?(<a href="(#footnote-ref-\d+)">.*?</a>))</p></li>',
+                footnotes_html,
+                re.DOTALL,
+            )
+        ],
     }
+
 
 @require_http_methods(["POST"])
 def docx_preview_view(request):
-    if request.method == 'POST' and request.FILES.get('file'):
-        file = request.FILES['file']
+    if request.method == "POST" and request.FILES.get("file"):
+        file = request.FILES["file"]
         alignments = extract_alignment(file)
         result = convert_to_html(file, style_map=style_map)
         html = add_alignment_to_html(result.value, alignments)
         document = get_footnote_from_html(html)
-        return render(request, 'footnotes.html', document)
-    return ''
+        return render(request, "footnotes.html", document)
+    return HttpResponse("Invalid request")
