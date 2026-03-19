@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "Demo for django-docx-footnote using CKEditor"
 requires-python = ">=3.11"
 dependencies = [
-    "django-docx-footnote"
+    "django-docx-footnote",
+    "django-ckeditor-5"
 ]
 
 [tool.uv.sources]
