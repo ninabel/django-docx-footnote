@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                         const text = await response.text();
-                        // Example: insert a link to the uploaded doc
                         editor.insertContent(
                             text
                         );

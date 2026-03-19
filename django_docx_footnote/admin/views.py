@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
+from django.contrib.admin.views.decorators import staff_member_required
 import zipfile
 import re
 import xml.etree.ElementTree as ET
@@ -79,6 +80,7 @@ def get_footnote_from_html(html):
     }
 
 
+@staff_member_required
 @require_http_methods(["POST"])
 def docx_preview_view(request):
     if request.method == "POST" and request.FILES.get("file"):
@@ -88,4 +90,4 @@ def docx_preview_view(request):
         html = add_alignment_to_html(result.value, alignments)
         document = get_footnote_from_html(html)
         return render(request, "footnotes.html", document)
-    return HttpResponse("Invalid request")
+    return HttpResponse("Invalid request", status=400)
