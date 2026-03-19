@@ -11,3 +11,8 @@ wheels/
 .env
 temp.py
 *.sqlite3
+demos/example/README.md
+demos/example/project/admin.py
+demos/library/admin.py
+demos/staticfiles/*
+uv.lock
