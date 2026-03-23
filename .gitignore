@@ -14,3 +14,4 @@ temp.py
 demos/ckeditor_demo/django_ckeditor_5/node_modules/*
 demos/staticfiles/*
 uv.lock
+demos/ckeditor_demo/django_ckeditor_5/node_modules/*

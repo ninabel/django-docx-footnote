@@ -1,4 +1,6 @@
-import { Plugin, ButtonView, icons } from 'ckeditor5';
+import { Plugin } from '@ckeditor/ckeditor5-core';
+import { ButtonView } from '@ckeditor/ckeditor5-ui';
+import { IconImportExport } from '@ckeditor/ckeditor5-icons';
 
 export default class DocxUpload extends Plugin {
     static get pluginName() {
@@ -14,7 +16,7 @@ export default class DocxUpload extends Plugin {
 
             view.set({
                 label: 'DOCX Upload',
-                icon: icons.importExport,
+                icon: IconImportExport,
                 tooltip: true
             });
 
@@ -39,18 +41,19 @@ export default class DocxUpload extends Plugin {
                     formData.append('file', file);
 
                     try {
-                        const response = await fetch('/admin/docx-upload/', {
+                        const response = await fetch('/admin/docx-preview/', {
                             method: 'POST',
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            headers: { 
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': this._getCsrfToken()
+                            },
                             body: formData,
                         });
 
                         const text = await response.text();
 
-                        // Insert link to uploaded DOCX
-                        editor.execute('insertContent',
-                            { html: text }
-                        );
+                        // Insert uploaded DOCX
+                        editor.setData(text);
                     } catch (e) {
                         console.error('DOCX upload failed:', e);
                     }
@@ -62,18 +65,7 @@ export default class DocxUpload extends Plugin {
     }
 
 
-    _getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
+    _getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
     }
 }
