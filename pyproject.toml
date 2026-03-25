@@ -21,6 +21,7 @@ members = [
 dev = [
     "build>=1.4.0",
     "ruff>=0.15.2",
+    "pytest-django>=4.12",
 ]
 
 [build-system]
