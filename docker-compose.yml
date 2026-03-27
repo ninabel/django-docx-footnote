@@ -1,0 +1,21 @@
+services:
+  example:
+    build:
+      context: .
+      args:
+        DEMO_NAME: example
+    ports: [ "8001:8000" ]
+
+  tinymce:
+    build:
+      context: .
+      args:
+        DEMO_NAME: tinymce_demo
+    ports: [ "8002:8000" ]
+
+  ckeditor:
+    build:
+      context: .
+      args:
+        DEMO_NAME: ckeditor_demo
+    ports: [ "8003:8000" ]
